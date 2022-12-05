@@ -5,13 +5,10 @@ const ContributionsHandler = require("./contributions");
 const AllocationsHandler = require("./allocations");
 const MemosHandler = require("./memos");
 const ResearchHandler = require("./research");
-const {
-    environmentalScripts
-} = require("../../config/config");
+const { environmentalScripts } = require("../../config/config");
 const ErrorHandler = require("./error").errorHandler;
 
 const index = (app, db) => {
-
     "use strict";
 
     const sessionHandler = new SessionHandler(db);
@@ -50,8 +47,16 @@ const index = (app, db) => {
     app.post("/profile", isLoggedIn, profileHandler.handleProfileUpdate);
 
     // Contributions Page
-    app.get("/contributions", isLoggedIn, contributionsHandler.displayContributions);
-    app.post("/contributions", isLoggedIn, contributionsHandler.handleContributionsUpdate);
+    app.get(
+        "/contributions",
+        isLoggedIn,
+        contributionsHandler.displayContributions
+    );
+    app.post(
+        "/contributions",
+        isLoggedIn,
+        contributionsHandler.handleContributionsUpdate
+    );
 
     // Benefits Page
     app.get("/benefits", isLoggedIn, benefitsHandler.displayBenefits);
@@ -62,7 +67,11 @@ const index = (app, db) => {
      */
 
     // Allocations Page
-    app.get("/allocations/:userId", isLoggedIn, allocationsHandler.displayAllocations);
+    app.get(
+        "/allocations/:userId",
+        isLoggedIn,
+        allocationsHandler.displayAllocations
+    );
 
     // Memos Page
     app.get("/memos", isLoggedIn, memosHandler.displayMemos);
@@ -77,16 +86,16 @@ const index = (app, db) => {
     // Handle redirect for learning resources link
     app.get("/tutorial", (req, res) => {
         return res.render("tutorial/a1", {
-            environmentalScripts
+            environmentalScripts,
         });
     });
 
     app.get("/tutorial/:page", (req, res) => {
-        const {
-            page
-        } = req.params
+        const { page } = req.params;
+
+        page = parseInt(page);
         return res.render(`tutorial/${page}`, {
-            environmentalScripts
+            environmentalScripts,
         });
     });
 
