@@ -20,14 +20,19 @@ function SessionHandler(db) {
     });
   };
 
-  this.isAdminUserMiddleware = (req, res, next) => {
+  this.isAdminUserMiddleware = function (req, res, next) {
     if (req.session.userId) {
-      return userDAO.getUserById(req.session.userId, (err, user) =>
-        user && user.isAdmin ? next() : res.redirect('/login')
-      );
+      userDAO.getUserById(req.session.userId, function (err, user) {
+        if (user && user.isAdmin) {
+          next();
+        } else {
+          return res.redirect('/login');
+        }
+      });
+    } else {
+      console.log('redirecting to login');
+      return res.redirect('/login');
     }
-    console.log('redirecting to login');
-    return res.redirect('/login');
   };
 
   this.isLoggedInMiddleware = (req, res, next) => {
@@ -72,7 +77,7 @@ function SessionHandler(db) {
           return res.render('login', {
             userName: userName,
             password: '',
-            loginError: invalidUserNameErrorMessage,
+            loginError: errorMessage,
             //Fix for A2-2 Broken Auth - Uses identical error for both username, password error
             // loginError: errorMessage
             environmentalScripts,
@@ -81,7 +86,7 @@ function SessionHandler(db) {
           return res.render('login', {
             userName: userName,
             password: '',
-            loginError: invalidPasswordErrorMessage,
+            loginError: errorMessage,
             //Fix for A2-2 Broken Auth - Uses identical error for both username, password error
             // loginError: errorMessage
             environmentalScripts,
@@ -103,8 +108,15 @@ function SessionHandler(db) {
       // by wrapping the below code as a function callback for the method req.session.regenerate()
       // i.e:
       // `req.session.regenerate(() => {})`
-      req.session.userId = user._id;
-      return res.redirect(user.isAdmin ? '/benefits' : '/dashboard');
+      req.session.regenerate(function () {
+        req.session.userId = user._id;
+
+        if (user.isAdmin) {
+          return res.redirect('/benefits');
+        } else {
+          return res.redirect('/dashboard');
+        }
+      });
     });
   };
 
