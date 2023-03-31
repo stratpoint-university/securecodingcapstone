@@ -164,6 +164,14 @@ function SessionHandler(db) {
     errors.verifyError = '';
     errors.emailError = '';
 
+    function isValidEmail(email) {
+      if (typeof email !== 'string' || email.length > 255) {
+        return false; // Ensure email is a string and is not too long
+      }
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return EMAIL_RE.test(email); // Validate email format
+    }
+
     if (!USER_RE.test(userName)) {
       errors.userNameError = 'Invalid user name.';
       return false;
@@ -186,7 +194,7 @@ function SessionHandler(db) {
       errors.verifyError = 'Password must match';
       return false;
     }
-    if (!EMAIL_RE.test(email)) {
+    if (!isValidEmail(email)) {
       errors.emailError = 'Invalid email address';
       return false;
     }
