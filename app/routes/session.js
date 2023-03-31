@@ -186,13 +186,10 @@ function SessionHandler(db) {
       errors.verifyError = 'Password must match';
       return false;
     }
-    if (email !== '') {
-      if (!EMAIL_RE.test(email)) {
-        errors.emailError = 'Invalid email address';
-        return false;
-      }
+    if (!EMAIL_RE.test(email)) {
+      errors.emailError = 'Invalid email address';
+      return false;
     }
-    return true;
   };
 
   this.handleSignup = (req, res, next) => {

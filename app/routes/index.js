@@ -87,6 +87,11 @@ const index = (app, db) => {
 
   app.get('/tutorial/:page', (req, res) => {
     const { page } = req.params;
+
+    if (!/^[a-zA-Z0-9]+$/.test(page)) {
+      // Handle invalid input
+      return res.status(400).send('Invalid page parameter');
+    }
     return res.render(`tutorial/${page}`, {
       environmentalScripts,
     });
