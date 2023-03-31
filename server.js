@@ -15,6 +15,7 @@ const { port, db, cookieSecret } = require('./config/config'); // Application co
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
+const helmet = require('helmet');
 
 MongoClient.connect(db, (err, db) => {
   if (err) {
@@ -31,6 +32,11 @@ MongoClient.connect(db, (err, db) => {
   });
 
   app.disable('x-powered-by');
+  app.use(helmet.xframe());
+  app.use(helmet.noCache());
+  app.use(helmet.csp());
+  app.use(helmet.hsts());
+  app.use(nosniff());
   // Adding/ remove HTTP Headers for security
   app.use(favicon(__dirname + '/app/assets/favicon.ico'));
 

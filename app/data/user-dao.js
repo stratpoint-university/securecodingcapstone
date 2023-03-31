@@ -91,7 +91,7 @@ function UserDAO(db) {
 
     usersCol.findOne(
       {
-        userName: userName,
+        userName: { $eq: userName },
       },
       validateUserDoc
     );
@@ -110,7 +110,7 @@ function UserDAO(db) {
   this.getUserByUserName = (userName, callback) => {
     usersCol.findOne(
       {
-        userName: userName,
+        userName: { $eq: userName },
       },
       callback
     );
