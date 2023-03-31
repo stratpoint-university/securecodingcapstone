@@ -148,7 +148,7 @@ function SessionHandler(db) {
     const USER_RE = /^.{1,20}$/;
     const FNAME_RE = /^.{1,100}$/;
     const LNAME_RE = /^.{1,100}$/;
-    const EMAIL_RE = /^[\S]+@[\S]+\.[\S]+$/;
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const PASS_RE = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     /*
         //Fix for A2-2 - Broken Authentication -  requires stronger password
