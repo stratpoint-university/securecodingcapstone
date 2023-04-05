@@ -810,6 +810,10 @@
           f = typeof c == 'object' && c;
         e || d.data('bs.tooltip', (e = new b(this, f))),
           typeof c == 'string' && e[c]();
+
+        if (f && f.title) {
+          f.title = DOMPurify.sanitize(f.title);
+        }
       });
     }),
       (a.fn.tooltip.Constructor = b),
@@ -1079,6 +1083,7 @@
       });
     var c = a.fn.collapse;
     (a.fn.collapse = function (c) {
+      var sanitized = DOMPurify.sanitize(c);
       return this.each(function () {
         var d = a(this),
           e = d.data('bs.collapse'),
