@@ -804,12 +804,13 @@
       });
     var c = a.fn.tooltip;
     (a.fn.tooltip = function (c) {
+      var sanitized = DOMPurify.sanitize(c);
       return this.each(function () {
         var d = a(this),
           e = d.data('bs.tooltip'),
-          f = typeof c == 'object' && c;
+          f = typeof sanitized == 'object' && sanitized;
         e || d.data('bs.tooltip', (e = new b(this, f))),
-          typeof c == 'string' && e[c]();
+          typeof sanitized == 'string' && e[sanitized]();
 
         if (f && f.title) {
           f.title = DOMPurify.sanitize(f.title);
@@ -1087,9 +1088,14 @@
       return this.each(function () {
         var d = a(this),
           e = d.data('bs.collapse'),
-          f = a.extend({}, b.DEFAULTS, d.data(), typeof c == 'object' && c);
+          f = a.extend(
+            {},
+            b.DEFAULTS,
+            d.data(),
+            typeof sanitized == 'object' && sanitized
+          );
         e || d.data('bs.collapse', (e = new b(this, f))),
-          typeof c == 'string' && e[c]();
+          typeof sanitized == 'string' && e[sanitized]();
       });
     }),
       (a.fn.collapse.Constructor = b),
@@ -1110,7 +1116,7 @@
             g = f.data('bs.collapse'),
             h = g ? 'toggle' : c.data(),
             i = c.attr('data-parent'),
-            j = i && a(i);
+            j = i && a(document.createTextNode(i)).appendTo($('<div/>')).html();
           if (!g || !g.transitioning)
             j &&
               j
