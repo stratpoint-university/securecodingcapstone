@@ -498,7 +498,7 @@
             d = c.attr('href'),
             e = a(
               c.attr('data-target') ||
-                (d && encodeURIComponent(d.replace(/.*(?=#[^\s]+$)/, '')))
+                (d && '#' + encodeURIComponent(d.replace(/.*(?=#[^\s]+$)/, '')))
             ),
             f = e.data('modal')
               ? 'toggle'
@@ -1116,11 +1116,12 @@
               c.attr('data-target') ||
               b.preventDefault() ||
               ((d = c.attr('href')) && d.replace(/.*(?=#[^\s]+$)/, '')),
-            f = a('<div>').html(e).find('*'),
-            g = f.data('bs.collapse'),
-            h = g ? 'toggle' : c.data(),
-            i = c.attr('data-parent'),
-            j = i && a(document.createTextNode(i)).appendTo($('<div/>')).html();
+            f = $('<div>').text(e).find('*');
+          (g = f.data('bs.collapse')),
+            (h = g ? 'toggle' : c.data()),
+            (i = c.attr('data-parent')),
+            (j =
+              i && a(document.createTextNode(i)).appendTo($('<div/>')).html());
           if (!g || !g.transitioning)
             j &&
               j
