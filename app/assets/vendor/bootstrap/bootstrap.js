@@ -21,7 +21,7 @@
     var c = a(this),
       d = c.attr('data-target');
     d || ((d = c.attr('href')), (d = d && d.replace(/.*(?=#[^\s]*$)/, '')));
-    var e = a(d);
+    var e = a(document.createTextNode(d));
     b && b.preventDefault(),
       e.length || (e = c.hasClass('alert') ? c : c.parent()),
       e.trigger((b = a.Event('close.bs.alert')));
@@ -247,7 +247,7 @@
             d,
             e = a(
               c.attr('data-target') ||
-                ((d = c.attr('href')) && d.replace(/.*(?=#[^\s]+$)/, ''))
+                ((d = c.attr('href')) && '#' + a.fn.escapeSelector(d.slice(1)))
             ),
             f = a.extend({}, e.data(), c.data()),
             g = c.attr('data-slide-to');
@@ -280,7 +280,7 @@
       c ||
         ((c = b.attr('href')),
         (c = c && /#/.test(c) && c.replace(/.*(?=#[^\s]*$)/, '')));
-      var d = c && a(c);
+      var d = c && a($.escapeSelector(c));
       return d && d.length ? d : b.parent();
     }
     ('use strict');
@@ -497,7 +497,8 @@
           var c = a(this),
             d = c.attr('href'),
             e = a(
-              c.attr('data-target') || (d && d.replace(/.*(?=#[^\s]+$)/, ''))
+              c.attr('data-target') ||
+                (d && encodeURIComponent(d.replace(/.*(?=#[^\s]+$)/, '')))
             ),
             f = e.data('modal')
               ? 'toggle'
@@ -709,7 +710,9 @@
       (b.prototype.setContent = function () {
         var a = this.tip(),
           b = this.getTitle();
-        a.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](b),
+        a
+          .find('.tooltip-inner')
+          [this.options.html ? 'html' : 'text'](temp.innerHTML),
           a.removeClass('fade in top bottom left right');
       }),
       (b.prototype.hide = function () {
@@ -896,7 +899,8 @@
         f = a.Event('show.bs.tab', { relatedTarget: e });
       b.trigger(f);
       if (f.isDefaultPrevented()) return;
-      var g = a(d);
+      var escapedSelector = $.escapeSelector(d);
+      var g = a(escapedSelector);
       this.activate(b.parent('li'), c),
         this.activate(g, g.parent(), function () {
           b.trigger({ type: 'shown.bs.tab', relatedTarget: e });
@@ -1112,7 +1116,7 @@
               c.attr('data-target') ||
               b.preventDefault() ||
               ((d = c.attr('href')) && d.replace(/.*(?=#[^\s]+$)/, '')),
-            f = a(e),
+            f = a('<div>').html(e).find('*'),
             g = f.data('bs.collapse'),
             h = g ? 'toggle' : c.data(),
             i = c.attr('data-parent'),
