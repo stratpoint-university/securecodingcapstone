@@ -1208,6 +1208,9 @@
         var d = a(this),
           e = d.data('bs.scrollspy'),
           f = typeof c == 'object' && c;
+        if (f) {
+          f = DOMPurify.sanitize(f); // sanitize user-controlled input
+        }
         e || d.data('bs.scrollspy', (e = new b(this, f))),
           typeof c == 'string' && e[c]();
       });
